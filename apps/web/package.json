@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:email": "email dev",
     "build": "next build --no-lint",
-    "start": "next start",
+    "start": "next start -p 3099",
     "ts": "tsc --noEmit"
   },
   "dependencies": {
