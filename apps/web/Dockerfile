@@ -57,9 +57,6 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/we
 # Copy public files
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
-# Debug: List contents after copying
-RUN ls -la
-RUN ls -la apps/web/.next/static || echo "static directory not found"
 
 # Set environment variables
 ENV NODE_ENV=production
