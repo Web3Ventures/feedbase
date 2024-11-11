@@ -33,7 +33,7 @@ COPY turbo.json turbo.json
 RUN ls -la apps/web/
 
 # Build the project and ensure standalone output
-RUN cd apps/web && pnpm build
+RUN cd apps/web && NEXT_TELEMETRY_DISABLED=1 pnpm build
 RUN ls -la apps/web/.next/
 
 # Runner stage
@@ -44,20 +44,21 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Create necessary directories
-RUN mkdir -p /app/apps/web/.next/static
-RUN mkdir -p /app/apps/web/public
-RUN chown -R nextjs:nodejs /app
-
 USER nextjs
 
-# Copy built application
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+# Copy standalone directory
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+# Copy static files
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+# Copy public files
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
-# Copy config files
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/next.config.js ./apps/web/
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/package.json ./apps/web/
+# Set environment variables
+ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
 
-# Use JSON format for CMD
-CMD ["node", "apps/web/server.js"]
+EXPOSE 3000
+
+# Update the CMD to use the standalone server
+CMD ["node", "server.js"]
