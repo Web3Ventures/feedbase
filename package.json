@@ -4,9 +4,9 @@
   "scripts": {
     "build": "dotenv -- turbo run build",
     "dev": "dotenv -- turbo run dev --filter=web",
+    "start": "dotenv -- turbo run start --filter=web",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "ts": "turbo run ts",
-    "prepare": "husky install"
+    "ts": "turbo run ts"
   },
   "devDependencies": {
     "@feedbase/eslint-config": "workspace:*",

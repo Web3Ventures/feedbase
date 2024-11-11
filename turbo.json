@@ -44,6 +44,14 @@
         "GITHUB_SECRET"
       ]
     },
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_SECRET"
+      ]
+    },
     "topo": {
       "dependsOn": [
         "^topo"
