@@ -7,7 +7,6 @@
     "dev:email": "email dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
     "ts": "tsc --noEmit"
   },
   "dependencies": {
