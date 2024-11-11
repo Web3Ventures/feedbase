@@ -29,14 +29,8 @@ RUN pnpm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-# Debug: List contents before build
-RUN ls -la apps/web/
-
 # Build the project and ensure standalone output
 RUN cd apps/web && NEXT_TELEMETRY_DISABLED=1 pnpm build
-# Debug: Check standalone directory contents
-RUN ls -la apps/web/.next/standalone || echo "standalone directory not found"
-RUN ls -la apps/web/.next/ || echo "next directory not found"
 
 # Runner stage
 FROM base AS runner
@@ -46,17 +40,19 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-USER nextjs
+# Copy all node_modules from installer stage
+COPY --from=installer --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/node_modules ./apps/web/node_modules
 
-# Copy standalone directory and preserve directory structure
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/apps/web ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/node_modules ./node_modules
+# Copy standalone directory
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/ ./
 
-# Copy static files maintaining the .next structure
+# Copy static files
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 # Copy public files
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
+USER nextjs
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -66,4 +62,4 @@ ENV PORT=3090
 EXPOSE 3090
 
 # Update the CMD to use the standalone server
-CMD ["node", "./server.js"]
+CMD ["node", "server.js"]
