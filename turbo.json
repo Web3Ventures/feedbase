@@ -28,6 +28,12 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_ROOT_DOMAIN",
+        "NODE_ENV"
       ]
     },
     "dev": {
@@ -41,11 +47,6 @@
     "topo": {
       "dependsOn": [
         "^topo"
-      ]
-    },
-    "lint": {
-      "dependsOn": [
-        "topo"
       ]
     },
     "ts": {

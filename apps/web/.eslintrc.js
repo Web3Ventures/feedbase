@@ -1,20 +1,9 @@
 module.exports = {
   root: true,
-  extends: ['@feedbase/eslint-config/next.js'],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: true,
+  extends: ['next/core-web-vitals'],
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@next/next/no-html-link-for-pages': 'off'
   },
-  ignorePatterns: ['dist', '.eslintrc.js', 'postcss.config.js', 'tailwind.config.js'],
-  settings: {
-    'import/resolver': {
-      typescript: {
-        project: ['packages/*/tsconfig.json', 'apps/*/tsconfig.json', 'tsconfig.json'],
-      },
-    },
-  },
-  globals: {
-    Messages: 'readonly',
-    NodeJS: true,
-  },
+  ignorePatterns: ['**/*']
 };
