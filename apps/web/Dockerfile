@@ -60,9 +60,9 @@ USER nextjs
 # Set environment variables
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
-ENV PORT=3090
+ENV PORT=3000
 
-EXPOSE 3090
+EXPOSE 3000
 
 # Update the CMD to use the standalone server
 CMD ["node", "apps/web/server.js"]
