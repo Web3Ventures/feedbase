@@ -4,7 +4,7 @@
   "scripts": {
     "build": "dotenv -- turbo run build",
     "dev": "dotenv -- turbo run dev",
-    "start": "dotenv -- turbo run start",
+    "start": "dotenv -- turbo run start --filter=web",
     "lint": "turbo run lint --",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "ts": "turbo run ts",
