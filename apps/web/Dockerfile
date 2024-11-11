@@ -54,7 +54,6 @@ USER nextjs
 # Copy built application
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 
 # Copy config files
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/next.config.js ./apps/web/
