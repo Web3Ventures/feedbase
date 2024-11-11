@@ -65,6 +65,8 @@ export default async function middleware(req: NextRequest) {
     .get('host')!
     .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
+  console.log('hostname', hostname);
+  console.log('process.env.NEXT_PUBLIC_ROOT_DOMAIN', process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
 
