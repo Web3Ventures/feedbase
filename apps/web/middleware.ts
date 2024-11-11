@@ -60,22 +60,29 @@ export default async function middleware(req: NextRequest) {
 
   const url = req.nextUrl;
 
-  // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = req.headers
-    .get('host')!
-    .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+  // Modified hostname handling to work with Docker
+  let hostname = req.headers.get('host') || '';
+  
+  // Handle both direct container access and domain access
+  if (hostname.includes('localhost') || hostname.match(/^\d+\.\d+\.\d+\.\d+/)) {
+    hostname = `localhost:3000`;
+  } else {
+    hostname = hostname.replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+  }
+
+  const path = url.pathname;
+
+  // Modified root domain detection
+  const rootDomain = hostname.includes('localhost') 
+    ? 'localhost:3000'
+    : hostname.split('.').length >= 2
+    ? `${hostname.split('.').slice(-2).join('.')}`
+    : null;
 
   console.log('hostname', hostname);
   console.log('process.env.NEXT_PUBLIC_ROOT_DOMAIN', process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
-
-  // Get root domain
-  const rootDomain = hostname.includes('localhost')
-    ? hostname.split('.').slice(-1)[0]
-    : hostname.split('.').length >= 2
-    ? `${hostname.split('.').slice(-2).join('.')}`
-    : null;
 
   // If the request is for a custom domain, rewrite to workspace paths
   if (

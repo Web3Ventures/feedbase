@@ -14,41 +14,23 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@feedbase/ui'],
+  swcMinify: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: hostPath[0],
-        hostname: hostPath[1].replace('//', ''),
-        port: hostPath[2],
-        pathname: '/storage/v1/object/public/changelog-images/**',
-      },
-      {
-        protocol: hostPath[0],
-        hostname: hostPath[1].replace('//', ''),
-        port: hostPath[2],
-        pathname: '/storage/v1/object/public/workspaces/**',
-      },
-    ],
+    domains: ['avatars.githubusercontent.com'],
   },
-  async rewrites() {
+  // Add this to ensure proper hostname handling in Docker
+  async headers() {
     return [
       {
-        source: '/:slug/board/:id',
-        destination: '/:slug',
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+        ],
       },
     ];
-  },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
   },
 };
 

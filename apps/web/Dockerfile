@@ -54,3 +54,8 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/we
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
 CMD node apps/web/server.js
+
+# Add or verify these lines in your Dockerfile
+EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
