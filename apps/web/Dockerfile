@@ -32,6 +32,9 @@ COPY turbo.json turbo.json
 # Build the project and ensure standalone output
 RUN cd apps/web && NEXT_TELEMETRY_DISABLED=1 pnpm build
 
+# In the installer stage, after the build command:
+RUN ls -la /app/apps/web/.next/standalone/
+
 # Runner stage
 FROM base AS runner
 WORKDIR /app
@@ -62,4 +65,4 @@ ENV PORT=3090
 EXPOSE 3090
 
 # Update the CMD to use the standalone server
-CMD ["node", "server.js"]
+CMD ["node", "apps/web/server.js"]
