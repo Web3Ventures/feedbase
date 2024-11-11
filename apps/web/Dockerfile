@@ -49,9 +49,7 @@ RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
 # Copy standalone directory and preserve directory structure
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/app ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/apps ./apps
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/apps/web/server.js ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/apps/web ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone/node_modules ./node_modules
 
 # Copy static files maintaining the .next structure
