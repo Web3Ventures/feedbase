@@ -15,6 +15,8 @@ import { generateApiToken, isSlugValid, isValidUrl } from '@/lib/utils';
 export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(
   async (user, supabase, project, error) => {
     // If any errors, return error
+    console.log('Getting project by slug in API', project, error);
+    //console.log('supabase', supabase);
     if (error) {
       return { data: null, error };
     }

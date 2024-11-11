@@ -127,9 +127,11 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
     const { supabase, user, apiKey } = await createClient(cType, allowAnonAccess);
+    console.log('withProjectAuth', user);
 
     // If user.error is not null, then the user is likely not logged in
     if ((user.error !== null && requireLogin) || user.data === null) {
+      console.log('User is not logged in', user.error);
       return handler(null, supabase, null, {
         message:
           user.error?.message === 'invalid claim: missing sub claim'
@@ -141,7 +143,6 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
 
     // Get project from database
     const { data: project, error } = await supabase.from('projects').select().eq('slug', slug).single();
-
     // If error is not null, then the project does not exist
     if (error) {
       return handler(user.data.user, supabase, project, { message: 'project not found.', status: 404 });

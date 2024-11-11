@@ -15,7 +15,9 @@ type Props = {
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Get project
+  console.log('Generating metadata for feedback page');
   const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+  console.log('Generated metadata for feedback page', project, error);
 
   // If project is undefined redirects to 404
   if (error?.status === 404 || !project) {
