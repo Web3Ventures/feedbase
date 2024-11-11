@@ -77,11 +77,14 @@ export default async function middleware(req: NextRequest) {
     ? `${hostname.split('.').slice(-2).join('.')}`
     : null;
 
+  console.log('rootDomain', rootDomain);
+
   // If the request is for a custom domain, rewrite to workspace paths
   if (
     rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN ||
     process.env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname)
   ) {
+    console.log('custom domain', hostname);
     // Retrieve the workspace from the database
     const { data: workspace, error } = await supabase
       .from('workspace')
@@ -92,9 +95,11 @@ export default async function middleware(req: NextRequest) {
 
     // If the workspace doesn't exist, return 404
     if (error || !workspace) {
+      console.log('workspace not found', error);
       return NextResponse.next();
     }
 
+    console.log('workspace found', workspace);
     // If the workspace exists, rewrite the request to the workspace's folder
     return NextResponse.rewrite(
       new URL(
@@ -135,6 +140,7 @@ export default async function middleware(req: NextRequest) {
 
   // rewrite root application to `/home` folder
   if (hostname === 'localhost:3000' || hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+    console.log('root application', hostname);
     return NextResponse.rewrite(new URL(`/home${path === '/' ? '' : path}`, req.url), {
       headers: {
         'x-pathname': path,
@@ -152,6 +158,7 @@ export default async function middleware(req: NextRequest) {
       },
     });
   }
+  console.log('rewrite everything else to', hostname.split('.')[0]);
 
   // rewrite everything else to `/[sub-domain]/[path] dynamic route
   return NextResponse.rewrite(
