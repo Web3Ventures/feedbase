@@ -39,10 +39,8 @@
       ]
     },
     "start": {
-      "dependsOn": ["build"],
       "cache": false,
-      "persistent": true,
-      "outputs": ["standalone/**"]
+      "persistent": true
     },
     "topo": {
       "dependsOn": [

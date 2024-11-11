@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:email": "email dev",
     "build": "next build",
-    "start": "node .next/standalone/server.js",
+    "start": "next start",
     "ts": "tsc --noEmit"
   },
   "dependencies": {
